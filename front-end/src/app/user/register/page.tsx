@@ -121,7 +121,7 @@ const RegisterUser = () => {
                 </f.FormControl>
                 <f.FormMessage />
               </f.FormItem>
-            )}
+            )}     
           />
           <Button type="submit" className="w-full">Criar conta</Button>
         </form>
