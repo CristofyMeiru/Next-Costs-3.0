@@ -20,7 +20,7 @@ const profileImageSchema = z.object({
 });
 type profileImageType = z.infer<typeof profileImageSchema>;
 
-const UserCard = ({ name, isAuthor }: { name?: string; isAuthor?: string }) => {
+const UserCard = ({ name, isAuthor }: { name?: string; isAuthor?: boolean }) => {
   const { user } = useContext(AuthContext);
   const { toast } = useToast()
 
@@ -88,7 +88,7 @@ const UserCard = ({ name, isAuthor }: { name?: string; isAuthor?: string }) => {
         />
         <AvatarFallback>S/N</AvatarFallback>
       </Avatar>
-      <D.Dialog>
+      { isAuthor ? (<D.Dialog>
         {showCam ? (
           <D.DialogTrigger asChild>
             <Button
@@ -139,7 +139,9 @@ const UserCard = ({ name, isAuthor }: { name?: string; isAuthor?: string }) => {
             </form>
           </F.Form>
         </D.DialogContent>
-      </D.Dialog>
+      </D.Dialog>) : (
+        <></>
+      )}
       <span className="font-bold">{name}</span>
     </section>
   );

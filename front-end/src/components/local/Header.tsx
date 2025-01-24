@@ -32,7 +32,7 @@ const Header = () => {
   }
   return (
     <header className=" bg-stone-950 text-neutral-100 flex justify-between items-center p-4 pl-8">
-      <Link href={`/user/`}>
+      <Link href={`/user/${user.username}`}>
         <LucideCoins className=" size-9 text-yellow-300 " />
       </Link>
       <nav className=" ml-20 flex space-x-6">
