@@ -23,12 +23,13 @@ type authFormType = z.infer<typeof authFormSchema>
 const authPage = () => {
 
     const {user} = useContext(AuthContext)
-
+    const { toast } = useToast();
+    
     if(user){
       return window.location.href = `/user/${user.username}`
     }
 
-    const { toast } = useToast()
+    
     const form = useForm<authFormType>({
       resolver: zodResolver(authFormSchema),
       mode: 'onBlur',
@@ -46,14 +47,16 @@ const authPage = () => {
         headers: {
           "Content-type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        credentials: "include"
       }).then(res => {
         return res.json()
       }).then(data => {
         toast({
           title: "Login efetuado",
-          description: `Bem vindo novamente ${nameProfile}!`
+          description: `Bem vindo(a) novamente ${nameProfile}!`
         })
+        console.log(data.authToken)
         sessionStorage.setItem('authToken', data.authToken)
         setTimeout(()=> {},3000)
         return window.location.href = `/user/${nameProfile}`

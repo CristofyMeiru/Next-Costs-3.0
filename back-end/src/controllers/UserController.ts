@@ -102,9 +102,9 @@ class UserControllerPOST {
       newRefresh.save()
       res.cookie('refreshToken', refreshToken,  {
         httpOnly: true,
-        sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       })
+      
       return res.status(200).json({message: "Log in successful.", authToken})
     } catch (err) {
       return res
@@ -116,6 +116,7 @@ class UserControllerPOST {
   public async refreshAuth(req: Request, res: Response){
     try {
         const secret = String(process.env.SECRET_KEY)
+        console.log(req.cookies['refreshToken'])
         const refreshToken = req.cookies['refreshToken']
         if(!refreshToken){
           return res.status(401).json({message: "Invalid access, log in first."})
@@ -136,7 +137,12 @@ class UserControllerPOST {
         .status(401)
         .json({ message: "Expired session." });
     }
-  }
-}
+  }    
+  public async addProfileImage(req: Request, res: Response){
+    
+    return res.status(201).json({message: "Profile picture has been successfully updated!"})
+  }   
+} 
 export const userControllerGET = new UserControllerGET();
 export const userControllerPOST = new UserControllerPOST();
+ 

@@ -18,7 +18,8 @@ export async function genRefreshToken(userID: string | jwt.JwtPayload){
     try {
         const secret = String(process.env.SECRET_KEY)
         const token = jwt.sign({userID}, secret, {
-            expiresIn: "7d"
+            expiresIn: "7d",
+            
         })
         return token
     } catch (err){

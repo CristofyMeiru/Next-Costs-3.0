@@ -1,4 +1,4 @@
-
+'use client'
 import { Button, buttonVariants } from "@/components/ui/button";
 import { AuthContext } from "@/context/AuthContext";
 import Image from "next/image";
@@ -7,7 +7,10 @@ import { useContext } from "react";
 
 export default function Home() {
 
-  
+  const {user} = useContext(AuthContext)
+  if(user){
+    return window.location.href = "/user/" + user.username
+  }
   return (
     <main className="flex items-center justify-center min-h-screen p-8 pb-20 gap-16 w-screen font-[family-name:var(--font-geist-sans)]">
       <div className=" flex flex-col items-center justify-start ">

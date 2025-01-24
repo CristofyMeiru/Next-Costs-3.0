@@ -18,16 +18,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/refresh_auth`,
       {
         method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
         credentials: "include",
       }
     )
       .then((res) => {
         if (res.status === 401 || !res.ok) {
-          console.log(res.json())
-          if (pathName != "/user/auth" && pathName != "/" && pathName != '/user/register') {
+          if (pathName != "/user/auth" && pathName != "/") {
             return (window.location.href = "/user/auth");
           }
         }
@@ -40,7 +36,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return console.log(err);
       });
   }
-
+ 
   async function getUserData() {
     const authToken = sessionStorage.getItem("authToken");
     if (authToken == "undefined" || !authToken) {

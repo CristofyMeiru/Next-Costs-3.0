@@ -22,10 +22,7 @@ type registerFormType = z.infer<typeof registerFormSchema>;
 
 const RegisterUser = () => {
 
-  const {user} = useContext(AuthContext)
-  if(user){
-    return window.location.href = `/user/${user.username}`
-  }
+  
   const form = useForm<registerFormType>({
     resolver: zodResolver(registerFormSchema),
     mode: "onBlur",
@@ -38,7 +35,7 @@ const RegisterUser = () => {
   });
 
   async function onSubmit(data: registerFormType) {
-    await fetch("http://localhost:3333/user/register", {
+    await fetch(`http://localhost:3333/user/register`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",

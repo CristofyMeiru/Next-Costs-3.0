@@ -5,6 +5,7 @@ import cookieParser, { } from 'cookie-parser'
 import userRoutes from './routes/user.routes'
 import ConnectToDB from './config/ConnectToDB'
 import projectRoutes from './routes/project.routes'
+import path from 'path'
 
 const app: Application = express()
 const port: number = Number(process.env.PORT)
@@ -16,12 +17,13 @@ app.use(cors({
     origin: "http://localhost:3000",
     credentials: true,
 }))
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 //Conection with DB
     ConnectToDB()
 //Rotas categorizadas
 app.use('/user', userRoutes)
 app.use('/project', projectRoutes)
-
+  
 app.listen(port, ()=> {
     console.log("Server is running...\nhttp://localhost:" + port)
 })
