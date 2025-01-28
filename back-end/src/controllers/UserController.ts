@@ -25,6 +25,7 @@ class UserControllerGET {
   public async userData(req: Request, res: Response){
     try {
       const authToken = String(req.headers.authorization?.split(" ")[1]);
+      
       const secret = String(process.env.SECRET_KEY);
       const contentToken = jwt.decode(authToken) as any;
       const user = await User.findById(contentToken.userID);
@@ -116,7 +117,6 @@ class UserControllerPOST {
   public async refreshAuth(req: Request, res: Response){
     try {
         const secret = String(process.env.SECRET_KEY)
-        console.log(req.cookies['refreshToken'])
         const refreshToken = req.cookies['refreshToken']
         if(!refreshToken){
           return res.status(401).json({message: "Invalid access, log in first."})
@@ -142,6 +142,29 @@ class UserControllerPOST {
     
     return res.status(201).json({message: "Profile picture has been successfully updated!"})
   }   
+  public async logoutAccount(req: Request, res: Response){
+    try {
+          const { username } = req.params;
+          const refreshToken = req.cookies["refreshToken"];
+
+          if (!username || !refreshToken) {
+            return res.status(400).json({ message: "" });
+          }
+
+          const refreshInDB = await RefreshToken.findOne({payload: refreshToken})
+          if(!refreshInDB){
+            return res.status(401).json({message: "Missing refresh token."})
+          }
+          await RefreshToken.findOneAndDelete({payload: refreshToken})
+
+          res.clearCookie("refreshToken", {
+            httpOnly: true,
+          });
+          return res.json({ message: "Deu certo", refreshInDB });
+    } catch (error) {
+      return res.status(400).json({message: "Something wrong, try again later."})
+    }
+  }
 } 
 export const userControllerGET = new UserControllerGET();
 export const userControllerPOST = new UserControllerPOST();

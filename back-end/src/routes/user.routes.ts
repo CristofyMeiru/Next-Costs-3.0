@@ -11,6 +11,7 @@ userRoutes.get("/get_user_data", tokenMiddleware.checkAuthToken, userControllerG
 //Rotas POST
 userRoutes.post("/register", userControllerPOST.registerUser);
 userRoutes.post('/auth', userControllerPOST.auth)
+userRoutes.post('/logout/:username', tokenMiddleware.checkAuthToken, userControllerPOST.logoutAccount)
 userRoutes.post('/refresh_auth', userControllerPOST.refreshAuth)
 userRoutes.post('/set_profile_image', tokenMiddleware.checkAuthToken, upload.single('profile_image'), userControllerPOST.addProfileImage)
 

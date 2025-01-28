@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,25 +10,60 @@ import * as DM from "../ui/dropdown-menu";
 import { useTheme } from "next-themes";
 import { Button, buttonVariants } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
+import * as AD from "../ui/alert-dialog";
 
 const Header = () => {
   const pathName = usePathname();
   const { user } = useContext(AuthContext);
   const { setTheme, theme } = useTheme();
 
+  const [isLogoutOpen, setIsLogoutOpen] = useState<boolean>(false);
+
   const ignorePages = ["/", "/user/auth", "/user/register"];
 
   if (ignorePages.includes(pathName)) {
     return <></>;
   }
-  if(!user){
+  if (!user) {
     return (
       <header className=" bg-stone-950 text-neutral-100 flex justify-between items-center p-4 pl-8">
         <Skeleton className=" size-9 " />
         <Skeleton className=" ml-20 w-[350px] h-[36px] " />
         <Skeleton className=" w-[80px] h-[36px] " />
       </header>
+    );
+  }
+  //handleOpenChange soluciona o bug do dropdownMenu deixar pagina congelada
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      //remove the style="pointer-events: none;" from the body
+      document.body.style.pointerEvents = "auto";
+    }
+  };
+
+  async function logoutAccount() {
+    const authToken = sessionStorage.getItem("authToken");
+    await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/user/logout/${user?.username}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+        credentials: "include",
+      }
     )
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        sessionStorage.removeItem('authToken')
+        return window.location.href = '/'
+      })
+      .catch((err) => {
+        return console.log(err); 
+      });
   }
   return (
     <header className=" bg-stone-950 text-neutral-100 flex justify-between items-center p-4 pl-8">
@@ -46,7 +81,7 @@ const Header = () => {
           Sobre nós
         </Link>
       </nav>
-      <DM.DropdownMenu>
+      <DM.DropdownMenu onOpenChange={handleOpenChange}>
         <DM.DropdownMenuTrigger asChild>
           <section className=" hover:cursor-pointer flex items-center space-x-4 ">
             <div>
@@ -89,12 +124,35 @@ const Header = () => {
             )}
           </DM.DropdownMenuItem>
           <DM.DropdownMenuItem>
-            <Button className=" font-bold w-full " variant="outline">
+            <Button
+              onClick={() => {
+                setIsLogoutOpen(!isLogoutOpen);
+              }}
+              className=" font-bold w-full "
+              variant="outline"
+            >
               Log out
             </Button>
           </DM.DropdownMenuItem>
         </DM.DropdownMenuContent>
       </DM.DropdownMenu>
+      <AD.AlertDialog open={isLogoutOpen}>
+        <AD.AlertDialogTrigger asChild></AD.AlertDialogTrigger>
+        <AD.AlertDialogContent>
+          <AD.AlertDialogHeader>
+            <AD.AlertDialogTitle>Fazer logout</AD.AlertDialogTitle>
+            <AD.AlertDialogDescription>
+              Você saira da sua sessão atual se continuar.
+            </AD.AlertDialogDescription>
+          </AD.AlertDialogHeader>
+          <AD.AlertDialogFooter>
+            <AD.AlertDialogCancel onClick={() => setIsLogoutOpen(false)}>
+              Cancel
+            </AD.AlertDialogCancel>
+            <AD.AlertDialogAction onClick={logoutAccount}>Log out</AD.AlertDialogAction>
+          </AD.AlertDialogFooter>
+        </AD.AlertDialogContent>
+      </AD.AlertDialog>
     </header>
   );
 };

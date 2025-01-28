@@ -1,4 +1,9 @@
 import mongoose, { Document, Schema, model } from 'mongoose'
+import { JwtPayload } from 'jsonwebtoken';
+
+export interface IAuthToken extends JwtPayload {
+    userID?: string
+}
 
 interface IRefresh extends Document {
     payload: string;

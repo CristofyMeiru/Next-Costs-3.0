@@ -56,7 +56,6 @@ const authPage = () => {
           title: "Login efetuado",
           description: `Bem vindo(a) novamente ${nameProfile}!`
         })
-        console.log(data.authToken)
         sessionStorage.setItem('authToken', data.authToken)
         setTimeout(()=> {},3000)
         return window.location.href = `/user/${nameProfile}`

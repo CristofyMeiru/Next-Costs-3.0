@@ -53,7 +53,7 @@ const RegisterUser = () => {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-8 pb-18 w-screen font-[family-name:var(--font-geist-sans)]">
-      <h2 className=" text-2xl ">Criar conta no Next Costs</h2>
+      <h2 className=" text-2xl font-semibold ">Criar conta no Next Costs</h2>
       <span className=" text-[12px] text-stone-300 ">Para começar com os projetos, vamos criar sua conta!</span>
       <f.Form {...form}>
         <form

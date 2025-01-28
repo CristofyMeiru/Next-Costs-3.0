@@ -73,7 +73,7 @@ const UserCard = ({ name, isAuthor }: { name?: string; isAuthor?: boolean }) => 
     return <Skeleton className=" w-1/6  p-4 py-32 rounded-md " />;
   }
   return (
-    <section className=" bg-stone-200 text-stone-800 dark:text-white dark:bg-stone-950 flex flex-col items-center p-4 py-10 w-1/6 rounded-md space-y-4 ">
+    <section className="  text-stone-800 dark:text-white dark:bg-stone-950 border border-stone-200 shadow shadow-stone-200 dark:shadow-none flex flex-col items-center p-4 py-10 w-1/6 max-h-64 rounded-md space-y-4 ">
       <Avatar
         className=" size-32"
         onMouseEnter={() => {
