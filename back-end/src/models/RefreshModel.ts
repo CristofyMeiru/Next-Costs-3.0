@@ -18,7 +18,8 @@ const refreshSchema = new Schema<IRefresh>({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        require: true
+        require: true,
+        ref: "users"
     },
     expiresAt: {
         type: Date,

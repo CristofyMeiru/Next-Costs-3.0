@@ -1,6 +1,8 @@
 "use client";
-import UserCard from "@/components/local/UserCard";
-import UserProjects, { ProjectProps } from "@/components/local/UserProjects";
+import UserCard from "@/components/local/UserPage/UserCard";
+import UserProjects, {
+  ProjectProps,
+} from "@/components/local/UserPage/UserProjects";
 import { AuthContext } from "@/context/AuthContext";
 import { UserTypeProps } from "@/context/ContentContext";
 import React from "react";
@@ -8,12 +10,11 @@ import { useEffect, useContext, useState } from "react";
 
 const ContentPage = ({ name }: { name: string }) => {
   const [userPage, setUserPage] = useState<UserTypeProps>();
-  const [allProjects, setAllProjects] = useState<ProjectProps[]>([])
-  
-  const {user} = useContext(AuthContext)
+  const [allProjects, setAllProjects] = useState<ProjectProps[]>([]);
 
+  const { user } = useContext(AuthContext);
 
-  const isAuthor = user?.username == userPage?.username ? true : false
+  const isAuthor = user?.username == userPage?.username ? true : false;
 
   async function pegarDados() {
     await fetch(
@@ -61,7 +62,7 @@ const ContentPage = ({ name }: { name: string }) => {
     pegarDados();
     getProjects();
   }, []);
-  
+
   return (
     <main className="flex max-h-screen p-8 pb-20 max-w-screen font-[family-name:var(--font-geist-sans)]">
       <UserCard name={userPage?.username} isAuthor={isAuthor} />

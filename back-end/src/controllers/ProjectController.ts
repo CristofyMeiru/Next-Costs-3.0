@@ -39,10 +39,10 @@ class ProjectControllerPOST {
   public async create(req: Request, res: Response) {
     try {
       const secret = String(process.env.SECRET_KEY);
-      const { title, category, content } = req.body;
+      const { title, category, content, budget } = req.body;
       const authToken = req.headers.authorization?.split(" ")[1];
 
-      if (!title || !category || !content) {
+      if (!title || !category || !content || !budget) {
         return res
           .status(400)
           .json({ message: "Something missing. Please try again." });
@@ -61,6 +61,7 @@ class ProjectControllerPOST {
       const newProject = new Project({
         title,
         category,
+        budget,
         content,
         author: authPayload.userID,
       });
@@ -70,6 +71,34 @@ class ProjectControllerPOST {
       return res
         .status(400)
         .json({ message: "Something wrong. Please try again later." });
+    }
+  }
+  public async editById(req: Request, res: Response) {
+    try {
+      const secret = process.env.SECRET_KEY as jwt.Secret
+      const { project_id } = req.params;
+      const { title, category, budget, content } = req.body;
+      const authToken = req.headers.authorization?.split(' ')[1]
+
+      if(!project_id || !authToken){
+        return res.status(404).json({message: "Something missing, enter valid values."})
+      }
+      const authTokenPayload = jwt.verify(authToken, secret) as IAuthToken
+
+      const projectOnTarget = await Project.findById(project_id)
+      if(!projectOnTarget){
+        return res.status(400).json({message: "Project not found."})
+      }
+      if (String(projectOnTarget.author) != authTokenPayload.userID) {
+        return res.status(401).json({message: "Unathourized access."})
+      }
+
+      await Project.findByIdAndUpdate(project_id, {
+        title, category, budget, content
+      })
+      return res.status(200).json({message: "Project update success!"})
+    } catch(err){
+      return res.status(400).json({message: "Something wrong, try again later."})
     }
   }
   public async deleteById(req: Request, res: Response) {
@@ -101,6 +130,6 @@ class ProjectControllerPOST {
     }
   }
 }
-
+  
 export const projectControllerGET = new ProjectControllerGET();
 export const projectControllerPOST = new ProjectControllerPOST();

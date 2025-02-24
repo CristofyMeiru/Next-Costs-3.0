@@ -30,5 +30,7 @@ projectRoutes.post(
   projectControllerPOST.create
 );
 //Rotas DELETE
-projectRoutes.delete("/delete/:id", projectControllerPOST.deleteById);
+projectRoutes.delete("/delete/:id", projectControllerPOST.deleteById);  
+//Rotas de EDIT/UPDATE/PATCH
+projectRoutes.patch('/edit/:project_id', projectControllerPOST.editById)
 export default projectRoutes;

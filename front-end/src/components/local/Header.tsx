@@ -131,7 +131,7 @@ const Header = () => {
               className=" font-bold w-full "
               variant="outline"
             >
-              Log out
+              Sair
             </Button>
           </DM.DropdownMenuItem>
         </DM.DropdownMenuContent>
@@ -149,7 +149,7 @@ const Header = () => {
             <AD.AlertDialogCancel onClick={() => setIsLogoutOpen(false)}>
               Cancel
             </AD.AlertDialogCancel>
-            <AD.AlertDialogAction onClick={logoutAccount}>Log out</AD.AlertDialogAction>
+            <AD.AlertDialogAction onClick={logoutAccount}>Sair</AD.AlertDialogAction>
           </AD.AlertDialogFooter>
         </AD.AlertDialogContent>
       </AD.AlertDialog>
